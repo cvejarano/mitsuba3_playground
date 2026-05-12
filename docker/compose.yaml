@@ -1,0 +1,48 @@
+services:
+  mitsuba3_playground:
+    container_name: mitsuba3_playground
+    init: true
+    shm_size: 8gb
+
+    build:
+      context: .
+    environment:
+        # Let UV manage Python versions.
+      - UV_LINK_MODE=copy
+      - UV_PYTHON_PREFERENCE=only-system
+      - UV_SYSTEM_PYTHON=1
+      # This is to easily import src in the notebooks.
+      - PYTHONPATH=/workspace/src
+
+
+    # Add GPU support.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    volumes:
+        # Mount the source directory in the container.
+      - type: bind
+        source: ..
+        target: /workspace
+        # These are named volumes for UV.
+      - uv-cache:/root/.cache/uv
+      - uv-venv-mitsuba3_playground:/workspace/.venv
+      - uv-python-installs:/root/.local/share/uv/python  # Cache Python installations.
+
+    ports:
+      - "2718:2718"  # Marimo
+
+    # Startup command.
+    stdin_open: true
+    tty: true
+    command: tail -f /dev/null
+
+volumes:
+  uv-cache:
+  uv-venv-mitsuba3_playground:
+  uv-python-installs:
