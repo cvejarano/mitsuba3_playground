@@ -7,13 +7,15 @@ services:
     build:
       context: .
     environment:
+      # By default, use the Mitsuba's official repo and stable branch.
+      - GITHUB_USER=mitsuba-renderer
+      - MITSUBA_REF=stable
         # Let UV manage Python versions.
       - UV_LINK_MODE=copy
       - UV_PYTHON_PREFERENCE=only-system
       - UV_SYSTEM_PYTHON=1
       # This is to easily import src in the notebooks.
       - PYTHONPATH=/workspace/src
-
 
     # Add GPU support.
     deploy:
@@ -40,6 +42,7 @@ services:
     # Startup command.
     stdin_open: true
     tty: true
+    entrypoint: /workspace/docker/entrypoint.sh
     command: tail -f /dev/null
 
 volumes:
