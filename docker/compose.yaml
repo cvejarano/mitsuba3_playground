@@ -8,8 +8,9 @@ services:
       context: .
     environment:
       # By default, use the Mitsuba's official repo and stable branch.
-      - GITHUB_USER=mitsuba-renderer
-      - MITSUBA_REF=stable
+      # To override these, add them to an .env file.
+      - GITHUB_USER=${GITHUB_USER:-mitsuba-renderer}
+      - MITSUBA_REF=${MITSUBA_REF:-stable}
         # Let UV manage Python versions.
       - UV_LINK_MODE=copy
       - UV_PYTHON_PREFERENCE=only-system
@@ -42,7 +43,7 @@ services:
     # Startup command.
     stdin_open: true
     tty: true
-    entrypoint: /workspace/docker/entrypoint.sh
+    entrypoint: ["bash", "/workspace/docker/entrypoint.sh"]
     command: tail -f /dev/null
 
 volumes:

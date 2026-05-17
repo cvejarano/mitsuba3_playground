@@ -11,15 +11,13 @@ or Marimo notebooks, and optionally contributing changes back upstream.
 
 The commands below are intended to be run from the host shell in the ./docker directory of the project.
 
-The container build clones Mitsuba3 as a submodule. By default, it clones from
-the official Mitsuba3 repo and uses the "stable" branch. To clone from your own fork, pass the GITHUB_USER argument; to use a particular branch or tag, pass
-the MITSUBA_REF argument.
+The container's entrypoint script clones Mitsuba3 as a submodule. By default, it clones from the official Mitsuba3 repo and uses the "stable" branch. To change this, set the GITHUB_USER and MITSUBA_REF environment variables, by creating a `.env` file in the root of the repository.
 
 
 | Description | Command |
 |-------------|---------|
-| Build the container | `docker compose build --build-arg GITHUB_USER=<your_user> --build-arg MITSUBA_REF=<ref_to_clone>` |
-| Re-build the container | `docker compose build --no-cache --build-arg GITHUB_USER=<your_user> --build-arg MITSUBA_REF=<ref_to_clone>` |
+| Build the container | `docker compose build` |
+| Re-build the container | `docker compose build --no-cache` |
 | Start the container | `docker compose up -d` |
 | Stop the container | `docker compose down` |
 | Open a shell in the container | `docker compose exec mitsuba3_playground bash` |

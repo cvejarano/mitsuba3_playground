@@ -4,8 +4,6 @@
 set -euo pipefail
 
 MITSUBA_DIR="/workspace/mitsuba3"
-GITHUB_USER="${GITHUB_USER:-mitsuba-renderer}"
-MITSUBA_REF="${MITSUBA_REF:-stable}"
 
 # Clone Mitsuba3 if not already present.
 if [ ! -d "$MITSUBA_DIR/.git" ]; then
