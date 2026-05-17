@@ -9,10 +9,14 @@ or Marimo notebooks, and optionally contributing changes back upstream.
 
 > **NOTE:** the Docker files are designed to run on *rootless* mode.
 
+The container's entrypoint script clones Mitsuba3 as a submodule. By default, it clones from the official Mitsuba3 repo and uses the "stable" branch. To change this, set the GITHUB_USER and MITSUBA_REF environment variables, by creating a `.env` file in the ./docker directory, like this:
+
+```.sh
+GITHUB_USER=<your_user>
+MITSUBA_REF=<desired_branch_or_tag>
+```
+
 The commands below are intended to be run from the host shell in the ./docker directory of the project.
-
-The container's entrypoint script clones Mitsuba3 as a submodule. By default, it clones from the official Mitsuba3 repo and uses the "stable" branch. To change this, set the GITHUB_USER and MITSUBA_REF environment variables, by creating a `.env` file in the root of the repository.
-
 
 | Description | Command |
 |-------------|---------|
