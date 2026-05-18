@@ -40,7 +40,7 @@ services:
       - uv-python-installs:/root/.local/share/uv/python  # Cache Python installations.
 
     ports:
-      - "2718:2718"  # Marimo
+      - "2719:2719"  # Marimo.
 
     # Startup command.
     stdin_open: true

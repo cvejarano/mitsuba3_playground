@@ -43,6 +43,16 @@ To add dependencies, use:
 docker compose exec mitsuba3_playground uv add <python_package>
 ```
 
+### Marimo notebooks
+
+Launch the Marimo server with the following command:
+
+```sh
+docker compose exec mitsuba3_playground uv run marimo edit /workspace/notebooks --host 0.0.0.0 --port 2718 --no-token &
+```
+
+Access the notebooks at: http://localhost:2718/
+
 
 ## TODO
 
