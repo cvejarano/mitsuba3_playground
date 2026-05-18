@@ -11,7 +11,7 @@ rm -rf build
 
 mkdir build
 cd build
-cmake -GNinja -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release .. 
+cmake -GNinja -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release ..
 
 # -----
 echo "Building Mitsuba3..."

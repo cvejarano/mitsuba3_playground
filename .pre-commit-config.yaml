@@ -1,0 +1,42 @@
+# Pre-commit is intended to be installed and run from
+# outside the container.
+exclude: ^mitsuba3/
+
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    - id: check-added-large-files
+    - id: check-case-conflict
+    - id: check-yaml
+    - id: check-json
+    - id: check-toml
+    - id: debug-statements
+    - id: detect-private-key
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.14.14
+  hooks:
+    - id: ruff-check
+    - id: ruff-format
+
+- repo: https://github.com/pycqa/isort
+  rev: 7.0.0
+  hooks:
+    - id: isort
+      name: isort (python)
+
+- repo: https://github.com/crate-ci/typos
+  rev: v1.42.3
+  hooks:
+    - id: typos
+
+- repo: https://github.com/hukkin/mdformat
+  rev: 1.0.0
+  hooks:
+    - id: mdformat
+      additional_dependencies:
+        - mdformat-ruff         # Python code formatting
+        - ruff                  # Required for mdformat-ruff

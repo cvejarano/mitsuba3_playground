@@ -53,7 +53,6 @@ docker compose exec mitsuba3_playground uv run marimo edit /workspace/notebooks 
 
 Access the notebooks at: http://localhost:2718/
 
-
 ## TODO
 
 [ ] Support GPU or CPU in Dockerfile and compose.yaml.

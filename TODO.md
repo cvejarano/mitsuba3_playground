@@ -1,5 +1,9 @@
 # TODO
-- [ ] Support GPU or CPU in Dockerfile and compose.yaml.
-- [ ] Test in Windows/MacOS.
-- [ ] Do we really need PYTHONPATH=/workspace/src in compose.yaml?
-- [ ] Run Mitsuba tests.
+
+- Support GPU or CPU in Dockerfile and compose.yaml.
+- Test in Windows/MacOS.
+- Do we really need PYTHONPATH=/workspace/src in compose.yaml?
+- Run Mitsuba tests.
+- Custom BSDF.
+- Simplify readme (TL;DR, then the details).
+- Import from Blender.

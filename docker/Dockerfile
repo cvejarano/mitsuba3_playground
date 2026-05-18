@@ -1,6 +1,6 @@
 # Base image with or without GPU support.
 FROM nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04
-#FROM ubuntu:24.04 
+#FROM ubuntu:24.04
 
 # Note: this variable comes from the compose file, but it has to
 # be declared before use.
