@@ -11,10 +11,12 @@ services:
       # To override these, add them to an .env file.
       - GITHUB_USER=${GITHUB_USER:-mitsuba-renderer}
       - MITSUBA_REF=${MITSUBA_REF:-stable}
-        # Let UV manage Python versions.
+      # Required for compiling Mitsuba.
+      - CC=clang-18
+      - CXX=clang++-18
+      # For UV virtual environment.
       - UV_LINK_MODE=copy
-      - UV_PYTHON_PREFERENCE=only-system
-      - UV_SYSTEM_PYTHON=1
+      - VIRTUAL_ENV=/workspace/.venv
       # This is to easily import src in the notebooks.
       - PYTHONPATH=/workspace/src
 

@@ -27,20 +27,13 @@ RUN apt-get update && \
         libc++-18-dev \
         libc++abi-18-dev \
         cmake \
+        ccache \
         ninja-build \
         libpng-dev \
         libjpeg-dev \
         libpython3-dev && \
         # python3-setuptools &&\
     rm -rf /var/lib/apt/lists/*
-
-# Required for compiling Mitsuba.
-ENV CC=clang-18 \
-    CXX=clang++-18
-
-# Required to use Optix.
-ENV NVIDIA_VISIBLE_DEVICES=all \
-    NVIDIA_DRIVER_CAPABILITIES=all
 
 # Install UV.
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
