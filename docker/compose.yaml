@@ -17,6 +17,7 @@ services:
       # For UV virtual environment.
       - UV_LINK_MODE=copy
       - VIRTUAL_ENV=/workspace/.venv
+      - UV_PROJECT_ENVIRONMENT=/workspace/.venv
       # This is to easily import src in the notebooks.
       - PYTHONPATH=/workspace/src
 

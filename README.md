@@ -1,22 +1,50 @@
 # Playground for Mitsuba3 Custom Builds
 
-A Docker + UV setup for building Mitsuba3 from source, using it in scripts
-or Marimo notebooks, and optionally contributing changes back upstream.
+A Docker setup for building [Mitsuba3](https://github.com/mitsuba-renderer/mitsuba3) from source, using it in scripts or notebooks, and optionally contributing changes back upstream.
 
-## How to use
+## Features
 
-### Manage the Docker container
+- Build Mitsuba from source easily
+- Manage python environment with [UV](https://docs.astral.sh/uv/)
+- Sample [Marimo](https://marimo.io/) notebooks
 
-> **NOTE:** the Docker files are designed to run on *rootless* mode.
+## System Prerequisites
 
-The container's entrypoint script clones Mitsuba3 as a submodule. By default, it clones from the official Mitsuba3 repo and uses the "stable" branch. To change this, set the GITHUB_USER and MITSUBA_REF environment variables, by creating a `.env` file in the ./docker directory, like this:
+- Docker (the Docker files have been tested to work in *rootless* mode)
+- Docker Compose
+- git
 
-```.sh
-GITHUB_USER=<your_user>
-MITSUBA_REF=<desired_branch_or_tag>
-```
+For using the GPU for CUDA variants you also need the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
 
-The commands below are intended to be run from the host shell in the ./docker directory of the project.
+## Quick Start
+
+Run the docker commands below from the `docker` directory of the repo.
+
+1. Build and launch the container:
+
+   ```shell
+   docker compose up --build
+   ```
+
+   After this, press "d" to detach, the container will keep running.
+
+1. The provided script clones Mitsuba3 as a submodule in the right location. By default, it clones from the official Mitsuba3 repo and uses the "stable" branch. To change this, set the **GITHUB_USER** and **MITSUBA_REF** environment variables in the `docker/.env` file.
+
+1. Clone Mitsuba:
+
+   ```shell
+   docker compose exec mitsuba3_playground bash /workspace/mitsuba3_build_utils/clone_mitsuba.sh
+   ```
+
+1. Build Mitsuba. This will also create the UV Python environment if needed and install Mitsuba Python package:
+
+   ```shell
+   docker compose exec mitsuba3_playground bash /workspace/mitsuba3_build_utils/build_mitsuba.sh
+   ```
+
+1. You can check the build with the sample Marimo notebooks, navigate to `http://localhost:2719`. Replace `localhost` by the right IP if running on a server.
+
+## Other Docker Commands
 
 | Description | Command |
 |-------------|---------|
@@ -25,35 +53,59 @@ The commands below are intended to be run from the host shell in the ./docker di
 | Start the container | `docker compose up -d` |
 | Stop the container | `docker compose down` |
 | Open a shell in the container | `docker compose exec mitsuba3_playground bash` |
-| Run a command in the container (from the host shell) | `docker compose exec mitsuba3_playground <command>` |
+| Run a command in the container from the host shell | `docker compose exec mitsuba3_playground <command>` |
 
-### Create the Python environment and install dependencies
+## Python Environment and Additional Dependencies
 
-This project uses [UV](https://github.com/astral-sh/uv) to manage Python virtual environments and dependencies.
+This project uses [UV](https://docs.astral.sh/uv/reference/cli/) to manage a Python virtual environment and dependencies.
 
-To create the Python environment and install all dependencies from [pyproject.toml](pyproject.toml), use:
+To add or remove dependencies, use:
 
-```sh
-docker compose exec mitsuba3_playground uv sync
-```
-
-To add dependencies, use:
-
-```sh
+```shell
 docker compose exec mitsuba3_playground uv add <python_package>
 ```
 
-### Marimo notebooks
-
-Launch the Marimo server with the following command:
-
-```sh
-docker compose exec mitsuba3_playground uv run marimo edit /workspace/notebooks --host 0.0.0.0 --port 2718 --no-token &
+```shell
+docker compose exec mitsuba3_playground uv remove <python_package>
 ```
 
-Access the notebooks at: http://localhost:2718/
+The environment is created automatically. If you need to recreate it and install all the dependencies from [pyproject.toml](./pyproject.toml), delete the `./venv` directory, and run:
 
-## TODO
+```shell
+docker compose exec mitsuba3_playground uv sync
+```
 
-[ ] Support GPU or CPU in Dockerfile and compose.yaml.
-[ ] Test in Windows/MacOS.
+## Mitsuba Build and Variants
+
+The [mitsuba building script](./mitsuba3_build_utils/build_mitsuba.sh) uses the config file located at [./mitsuba3_build_utils/custom_mitsuba.conf](./mitsuba3_build_utils/custom_mitsuba.conf). If needed, in particular to define new variants, use this file and not the `mitsuba.conf` file in the build directory, as this gets overwritten at each build.
+
+Search for this part of the file:
+
+```yaml
+    # HERE: include which variants to build.
+    "enabled": [
+        "scalar_rgb",
+        "scalar_spectral",
+        "cuda_ad_rgb"
+        ...
+    ],
+
+```
+
+You must include at least the `scalar_rgb` and one `xxx_ad_xxx` variants, otherwise you'll get building errors. Remember that the more variants you build, the longer the build will take.
+
+Also, the builds are cached with [ccache](https://ccache.dev/).
+
+## Marimo Notebooks
+
+The Marimo server is launched at container startup, if required, it can be stopped with:
+
+```shell
+docker compose exec mitsuba3_playground pkill -f "marimo edit"
+```
+
+And relaunched with:
+
+```shell
+docker compose exec mitsuba3_playground uv run marimo edit /workspace/notebooks --host 0.0.0.0 --port 2719 --no-token &
+```
